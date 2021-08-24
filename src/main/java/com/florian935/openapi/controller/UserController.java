@@ -9,8 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 import static lombok.AccessLevel.PRIVATE;
-import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
@@ -40,5 +39,19 @@ public class UserController {
     User saveOneUser(@RequestBody User user) {
 
         return userService.save(user);
+    }
+
+    @DeleteMapping(path = "/{id}")
+    @ResponseStatus(NO_CONTENT)
+    void deleteUserById(@PathVariable String id) {
+
+        userService.deleteUserById(id);
+    }
+
+    @PutMapping(path = "/{id}", produces = APPLICATION_JSON_VALUE)
+    @ResponseStatus(OK)
+    User updateUser(@PathVariable String id, @RequestBody User user) {
+
+        return userService.updateUser(id, user);
     }
 }

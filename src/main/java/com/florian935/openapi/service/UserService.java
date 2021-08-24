@@ -11,7 +11,7 @@ import java.util.List;
 import static lombok.AccessLevel.PRIVATE;
 
 @Service
-@FieldDefaults(level = PRIVATE, makeFinal = true)
+@FieldDefaults(level = PRIVATE)
 public class UserService {
 
     List<User> users = new ArrayList<>() {{
@@ -38,6 +38,23 @@ public class UserService {
     public User save(User user) {
 
         this.users.add(user);
+
+        return user;
+    }
+
+    public void deleteUserById(String id) {
+
+        this.users = users.stream()
+                .filter(user -> !user.getId().equals(id))
+                .toList();
+    }
+
+    public User updateUser(String id, User user) {
+        user.setId(id);
+
+        users = users.stream()
+                .map(u -> user.getId().equals(u.getId()) ? user : u)
+                .toList();
 
         return user;
     }
