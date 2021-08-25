@@ -2,6 +2,11 @@ package com.florian935.openapi.controller;
 
 import com.florian935.openapi.domain.User;
 import com.florian935.openapi.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.headers.Header;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +25,24 @@ public class UserController {
 
     UserService userService;
 
+    @Operation(summary = "Fetch all users stored in DB")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Users fetched with success",
+                    content = {@Content(mediaType = "application/json")},
+                    headers = {
+                            @Header(name = "authorization",
+                                    description = "Bearer token to provide",
+                                    required = true),
+                            @Header(name = "content-type",
+                                    description = "content type of returned response",
+                                    required = true)}),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Internal server error while fetching data",
+                    content = {@Content(mediaType = "application/json")}),
+    })
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(OK)
     List<User> getAllUsers() {
